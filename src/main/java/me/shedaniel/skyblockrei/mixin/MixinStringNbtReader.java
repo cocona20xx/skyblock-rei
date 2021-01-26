@@ -26,6 +26,7 @@ public class MixinStringNbtReader implements StringNbtReaderHooks {
     @Inject(method = "parseListTag", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/StringReader;getCursor()I"))
     private void addUseless(CallbackInfoReturnable<Tag> cir) {
         if (legacyStyle) {
+            // Legacy NBT format contains useless indices to the list tag, here we will just skip them as we go.
             while (reader.peek(-1) != ':') {
                 reader.skip();
             }
