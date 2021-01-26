@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.StringReader;
 import me.shedaniel.rei.api.EntryStack;
-import me.shedaniel.skyblockrei.data.defination.SkyblockItemDefinition;
+import me.shedaniel.skyblockrei.data.definition.SkyblockItemDefinition;
 import me.shedaniel.skyblockrei.hooks.StringNbtReaderHooks;
 import me.shedaniel.skyblockrei.utils.Utils;
 import net.fabricmc.loader.api.FabricLoader;
@@ -72,6 +72,9 @@ public class DataManager {
                                             display.put("Name", StringTag.of(Text.Serializer.toJson(new LiteralText(item.displayName))));
                                         }
                                         tag.put("display", display);
+                                    }
+                                    if (tag.contains("SkullOwner")){
+                                        tag.getCompound("SkullOwner").put("Name", StringTag.of(Text.Serializer.toJson(new LiteralText(item.displayName + "NEUPLUGIN"))));
                                     }
                                     stack.setTag(tag);
                                     EntryStack entry = EntryStack.create(stack);

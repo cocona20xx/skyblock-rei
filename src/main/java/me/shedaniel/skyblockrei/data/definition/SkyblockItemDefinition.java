@@ -1,4 +1,4 @@
-package me.shedaniel.skyblockrei.data.defination;
+package me.shedaniel.skyblockrei.data.definition;
 
 import com.google.gson.annotations.SerializedName;
 
