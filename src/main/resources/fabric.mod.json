@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "skyblock-rei",
+  "version": "${version}",
+  "name": "Skyblock REI",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "LGPL-3.0",
+  "icon": "assets/skyblock-rei/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": ["me.shedaniel.skyblockrei.SkyblockREI"],
+    "rei_plugins": ["me.shedaniel.skyblockrei.SkyblockREIPlugin"]
+  },
+  "mixins": [
+    "skyblock-rei.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
