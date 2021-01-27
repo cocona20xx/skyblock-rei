@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.shedaniel.skyblockrei.mixin",
+  "package": "com.cocona.skyblockrei.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinStringNbtReader"

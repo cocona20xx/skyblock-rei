@@ -10,8 +10,12 @@
   "icon": "assets/skyblock-rei/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": ["me.shedaniel.skyblockrei.SkyblockREI"],
-    "rei_plugins": ["me.shedaniel.skyblockrei.SkyblockREIPlugin"]
+    "client": [
+      "com.cocona.skyblockrei.SkyblockREI"
+    ],
+    "rei_plugins": [
+      "com.cocona.skyblockrei.SkyblockREIPlugin"
+    ]
   },
   "mixins": [
     "skyblock-rei.mixins.json"
