@@ -1,7 +1,7 @@
-package me.shedaniel.skyblockrei.mixin;
+package com.cocona.skyblockrei.mixin;
 
+import com.cocona.skyblockrei.hooks.StringNbtReaderHooks;
 import com.mojang.brigadier.StringReader;
-import me.shedaniel.skyblockrei.hooks.StringNbtReaderHooks;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.nbt.Tag;
 import org.spongepowered.asm.mixin.Final;

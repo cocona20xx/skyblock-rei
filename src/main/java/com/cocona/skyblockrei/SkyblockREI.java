@@ -1,7 +1,7 @@
-package me.shedaniel.skyblockrei;
+package com.cocona.skyblockrei;
 
-import me.shedaniel.skyblockrei.data.DataManager;
-import me.shedaniel.skyblockrei.utils.Utils;
+import com.cocona.skyblockrei.utils.Utils;
+import com.cocona.skyblockrei.data.DataManager;
 import net.fabricmc.api.ClientModInitializer;
 
 public class SkyblockREI implements ClientModInitializer {

@@ -1,11 +1,11 @@
-package me.shedaniel.skyblockrei;
+package com.cocona.skyblockrei;
 
 import com.google.common.base.Predicates;
 import me.shedaniel.rei.api.EntryRegistry;
 import me.shedaniel.rei.api.EntryStack;
 import me.shedaniel.rei.api.plugins.REIPluginV0;
-import me.shedaniel.skyblockrei.data.DataManager;
-import me.shedaniel.skyblockrei.utils.Utils;
+import com.cocona.skyblockrei.data.DataManager;
+import com.cocona.skyblockrei.utils.Utils;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 

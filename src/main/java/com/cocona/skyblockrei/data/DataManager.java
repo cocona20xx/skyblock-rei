@@ -1,12 +1,12 @@
-package me.shedaniel.skyblockrei.data;
+package com.cocona.skyblockrei.data;
 
+import com.cocona.skyblockrei.hooks.StringNbtReaderHooks;
+import com.cocona.skyblockrei.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.brigadier.StringReader;
 import me.shedaniel.rei.api.EntryStack;
-import me.shedaniel.skyblockrei.data.definition.SkyblockItemDefinition;
-import me.shedaniel.skyblockrei.hooks.StringNbtReaderHooks;
-import me.shedaniel.skyblockrei.utils.Utils;
+import com.cocona.skyblockrei.data.definition.SkyblockItemDefinition;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.datafixer.fix.ItemInstanceTheFlatteningFix;
 import net.minecraft.item.ItemStack;

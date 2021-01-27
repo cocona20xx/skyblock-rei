@@ -1,4 +1,4 @@
-package me.shedaniel.skyblockrei.utils;
+package com.cocona.skyblockrei.utils;
 
 import com.google.common.collect.ImmutableMap;
 
