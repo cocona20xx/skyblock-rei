@@ -1,5 +1,6 @@
 package com.cocona.skyblockrei;
 
+import com.cocona.skyblockrei.downloader.GetNEUZip;
 import com.google.common.base.Predicates;
 import me.shedaniel.rei.api.EntryRegistry;
 import me.shedaniel.rei.api.EntryStack;

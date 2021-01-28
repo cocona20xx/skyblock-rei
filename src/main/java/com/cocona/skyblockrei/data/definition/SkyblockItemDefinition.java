@@ -1,6 +1,9 @@
 package com.cocona.skyblockrei.data.definition;
 
+import com.cocona.skyblockrei.recipe.skyblockCrafting.SkyblockCraftingRecipe;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.Dictionary;
 
 public class SkyblockItemDefinition {
     @SerializedName("internalname")
@@ -18,4 +21,6 @@ public class SkyblockItemDefinition {
     public String modVersion;
     @SerializedName("lore")
     public String[] lore;
+    public SkyblockCraftingRecipe recipe;
+
 }

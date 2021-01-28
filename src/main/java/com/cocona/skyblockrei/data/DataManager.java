@@ -1,6 +1,8 @@
 package com.cocona.skyblockrei.data;
 
+import com.cocona.skyblockrei.data.definition.SkyblockCraftingRecipeDeserializer;
 import com.cocona.skyblockrei.hooks.StringNbtReaderHooks;
+import com.cocona.skyblockrei.recipe.skyblockCrafting.SkyblockCraftingRecipe;
 import com.cocona.skyblockrei.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,6 +19,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 
 import java.io.BufferedReader;
@@ -25,21 +28,29 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
 public class DataManager {
     private static final Path BASE_DIR = FabricLoader.getInstance().getConfigDir().resolve("skyblockrei");
     public static final List<EntryStack> ITEMS = new ArrayList<>();
+    public static final List<Pair <String, SkyblockCraftingRecipe>> RECIPES = new ArrayList<>();
+    public static final List<Pair<SkyblockItemDefinition, EntryStack>> DEFINITION_PAIR = new ArrayList<>();
     
     public static void init() throws IOException {
         Files.createDirectories(BASE_DIR);
+        RECIPES.clear();
         ITEMS.clear();
+        DEFINITION_PAIR.clear();
         readNEU(BASE_DIR.resolve("NEU.zip"));
     }
     
     private static void readNEU(Path path) throws IOException {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        GsonBuilder builder = new GsonBuilder();
+        SkyblockCraftingRecipeDeserializer deserializer = new SkyblockCraftingRecipeDeserializer();
+        builder.registerTypeAdapter(SkyblockCraftingRecipe.class, deserializer);
+        Gson gson = builder.disableHtmlEscaping().setPrettyPrinting().create();
         try (FileSystem system = Utils.openZip(path, false)) {
             StreamSupport.stream(system.getRootDirectories().spliterator(), false)
                     .flatMap(Utils.wrap(Files::walk))
@@ -48,6 +59,7 @@ public class DataManager {
                             if (p.toString().contains("/items/") && p.toString().endsWith(".json")) {
                                 try (BufferedReader reader = Files.newBufferedReader(p)) {
                                     SkyblockItemDefinition item = gson.fromJson(reader, SkyblockItemDefinition.class);
+                                    item.recipe = gson.fromJson(reader, SkyblockCraftingRecipe.class);
                                     Identifier id;
                                     
                                     String fix = ItemInstanceTheFlatteningFix.getItem(item.id, item.damage);
@@ -55,6 +67,12 @@ public class DataManager {
                                         id = new Identifier(fix);
                                     } else {
                                         id = new Identifier(item.id);
+                                    }
+
+                                    synchronized (RECIPES){
+                                        if(item.recipe != null) {
+                                            RECIPES.add(new Pair<>(item.internalName, item.recipe));
+                                        }
                                     }
                                     
                                     ItemStack stack = new ItemStack(Registry.ITEM.get(id));
@@ -82,14 +100,13 @@ public class DataManager {
                                     synchronized (ITEMS) {
                                         ITEMS.add(entry);
                                     }
+                                    synchronized (DEFINITION_PAIR) {
+                                        DEFINITION_PAIR.add(new Pair<>(item, entry));
+                                    }
                                 }
                             }
                         });
                     });
         }
-    }
-    
-    public static class NEUDataParser {
-        
     }
 }
