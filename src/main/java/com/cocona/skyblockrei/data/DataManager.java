@@ -34,14 +34,14 @@ public class DataManager {
     private static final Path BASE_DIR = FabricLoader.getInstance().getConfigDir().resolve("skyblockrei");
     public static final List<EntryStack> ITEMS = new ArrayList<>();
     public static final List<Pair <String, SkyblockCraftingRecipe>> RECIPES = new ArrayList<>();
-    public static final List<Pair<String, EntryStack>> DEFINITION_LIST = new ArrayList<>();
+    public static final Map<String, Pair<String, EntryStack>> DEFINITION_MAP = new HashMap<>();
 
 
     public static void init() throws IOException {
         Files.createDirectories(BASE_DIR);
         RECIPES.clear();
         ITEMS.clear();
-        DEFINITION_LIST.clear();
+        DEFINITION_MAP.clear();
         readNEU(BASE_DIR.resolve("NEU.zip"));
     }
     
@@ -95,9 +95,9 @@ public class DataManager {
                                     synchronized (ITEMS) {
                                         ITEMS.add(entry);
                                     }
-                                    synchronized (DEFINITION_LIST) {
+                                    synchronized (DEFINITION_MAP) {
                                         Pair<String, EntryStack> pair = new Pair<>(item.internalName, entry);
-                                        DEFINITION_LIST.add(pair);
+                                        DEFINITION_MAP.put(pair.getLeft(), pair);
                                     }
                                 }
                             }

@@ -13,72 +13,58 @@ import java.util.Map;
 public class PackagedData {
     public static List<EntryStack> items = new ArrayList<>();
     public static List<Pair<String, SkyblockCraftingRecipe>> recipes = new ArrayList<>();
-    public static List<Pair<String, EntryStack>> defList = new ArrayList<>();
+    public static Map<String, Pair<String, EntryStack>> defMap = new HashMap<>();
 
-    public PackagedData(List<EntryStack> i, List<Pair<String, SkyblockCraftingRecipe>> r, List<Pair<String, EntryStack>> d) {
+    public PackagedData(List<EntryStack> i, List<Pair<String, SkyblockCraftingRecipe>> r, Map<String, Pair<String, EntryStack>> d) {
         items = i;
         recipes = r;
-        defList = d;
+        defMap = d;
     }
 
-    private EntryStack recipeMatcher(EntryStack current, Pair<String, EntryStack> definition, String internalName){
-        int quantity;
-        String name;
-        if(internalName.contains(":")) {
-            String[] split = internalName.split(":");
-            quantity = Integer.parseInt(split[1]);
-            name = split[0];
-        } else {
-            quantity = 1;
-            name = internalName;
+    private EntryStack getEntryFromMap(String key){
+        Pair<String, EntryStack> defaultResult = new Pair<>("", EntryStack.empty());
+        int amount = 1;
+        //amount parsing
+        String keyProcessed = key;
+        if (key.contains(":")){
+            String[] split = key.split(":");
+            amount = Integer.parseInt(split[1]);
+            keyProcessed = split[0];
         }
-        if(definition.getLeft().equals(name)){
-            EntryStack returnValue = definition.getRight().copy();
-            returnValue.setAmount(quantity);
+        Pair<String, EntryStack> attempt = defMap.getOrDefault(keyProcessed, defaultResult);
+        //sanity check
+        if(attempt.getLeft().matches(keyProcessed)){
+            EntryStack returnValue = attempt.getRight().copy();
+            returnValue.setAmount(amount);
             return returnValue;
-        } else return current;
+        } else return EntryStack.empty();
     }
 
     public List<Pair<EntryStack, List<EntryStack>>> recipePrep(){
-        List<Pair<EntryStack, List<EntryStack>>> output = Lists.newArrayList();
-        for(Pair<String, SkyblockCraftingRecipe> recipe : recipes){
-            EntryStack a1 = EntryStack.empty(),
-                    a2 = EntryStack.empty(),
-                    a3 = EntryStack.empty(),
-                    b1 = EntryStack.empty(),
-                    b2 = EntryStack.empty(),
-                    b3 = EntryStack.empty(),
-                    c1 = EntryStack.empty(),
-                    c2 = EntryStack.empty(),
-                    c3 = EntryStack.empty(),
-                    out = EntryStack.empty();
-
-            for(Pair<String, EntryStack> definition : defList){
-                out = recipeMatcher(out, definition, recipe.getLeft());
-                a1 = recipeMatcher(a1, definition, recipe.getRight().a1);
-                a2 = recipeMatcher(a2, definition, recipe.getRight().a2);
-                a3 = recipeMatcher(a3, definition, recipe.getRight().a3);
-                b1 = recipeMatcher(b1, definition, recipe.getRight().b1);
-                b2 = recipeMatcher(b2, definition, recipe.getRight().b2);
-                b3 = recipeMatcher(b3, definition, recipe.getRight().b3);
-                c1 = recipeMatcher(c1, definition, recipe.getRight().c1);
-                c2 = recipeMatcher(c2, definition, recipe.getRight().c2);
-                c3 = recipeMatcher(c3, definition, recipe.getRight().c3);
-
-            }
-            List<EntryStack> inputList = new ArrayList<>();
-            inputList.add(a1);
-            inputList.add(a2);
-            inputList.add(a3);
-            inputList.add(b1);
-            inputList.add(b2);
-            inputList.add(b3);
-            inputList.add(c1);
-            inputList.add(c2);
-            inputList.add(c3);
-            Pair<EntryStack, List<EntryStack>> pairRecipe = new Pair<>(out, inputList);
-            if(!pairRecipe.getLeft().isEmpty()) {
-                output.add(pairRecipe);
+        List<Pair<EntryStack, List<EntryStack>>> output = new ArrayList<>();
+        for(Pair<String, SkyblockCraftingRecipe> recipePair : recipes){
+            EntryStack out = getEntryFromMap(recipePair.getLeft());
+            EntryStack a1 = getEntryFromMap(recipePair.getRight().a1);
+            EntryStack a2 = getEntryFromMap(recipePair.getRight().a2);
+            EntryStack a3 = getEntryFromMap(recipePair.getRight().a3);
+            EntryStack b1 = getEntryFromMap(recipePair.getRight().b1);
+            EntryStack b2 = getEntryFromMap(recipePair.getRight().b2);
+            EntryStack b3 = getEntryFromMap(recipePair.getRight().b3);
+            EntryStack c1 = getEntryFromMap(recipePair.getRight().c1);
+            EntryStack c2 = getEntryFromMap(recipePair.getRight().c2);
+            EntryStack c3 = getEntryFromMap(recipePair.getRight().c3);
+            if(!out.isEmpty()){
+                List<EntryStack> outputSublist = new ArrayList<>();
+                outputSublist.add(a1);
+                outputSublist.add(a2);
+                outputSublist.add(a3);
+                outputSublist.add(b1);
+                outputSublist.add(b2);
+                outputSublist.add(b3);
+                outputSublist.add(c1);
+                outputSublist.add(c2);
+                outputSublist.add(c3);
+                output.add(new Pair<>(out, outputSublist));
             }
         }
         return output;
