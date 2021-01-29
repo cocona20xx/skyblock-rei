@@ -32,7 +32,7 @@ public class SkyblockREIPlugin implements REIPluginV0 {
     @Override
     public void registerEntries(EntryRegistry entryRegistry) {
         Utils.run(DataManager::init);
-        packagedData = new PackagedData(DataManager.ITEMS, DataManager.RECIPES, DataManager.DEFINITION_LIST);
+        packagedData = new PackagedData(DataManager.ITEMS, DataManager.RECIPES, DataManager.DEFINITION_MAP);
         entryRegistry.removeEntryIf(Predicates.alwaysTrue());
         List<EntryStack> stacks = new ArrayList<>(DataManager.ITEMS);
         stacks.sort(Comparator.<EntryStack, Identifier>comparing(stack -> Registry.ITEM.getId(stack.getItemStack().getItem()))
