@@ -1,11 +1,19 @@
 package com.cocona.skyblockrei.recipe.skyblockCrafting;
 
 import com.cocona.skyblockrei.SkyblockREI;
-import me.shedaniel.rei.api.RecipeCategory;
+import me.shedaniel.rei.api.EntryStack;
+import me.shedaniel.rei.plugin.crafting.DefaultCraftingCategory;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
-public class SkyblockCraftingCategory implements RecipeCategory<SkyblockCraftingRecipeDisplay> {
+public class SkyblockCustomCategory extends DefaultCraftingCategory {
+
+    @Override
+    public @NotNull EntryStack getLogo() {
+        return EntryStack.create(Items.GRASS_BLOCK);
+    }
+
     @Override
     public @NotNull Identifier getIdentifier() {
         return SkyblockREI.SKYBLOCK_CRAFTING_ID;
@@ -13,6 +21,8 @@ public class SkyblockCraftingCategory implements RecipeCategory<SkyblockCrafting
 
     @Override
     public @NotNull String getCategoryName() {
-        return "Skyblock Custom Crafting";
+        return "SkyblockCraftingImpl";
     }
+
+
 }

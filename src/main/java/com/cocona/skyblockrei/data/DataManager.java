@@ -1,11 +1,11 @@
 package com.cocona.skyblockrei.data;
 
-import com.cocona.skyblockrei.data.definition.SkyblockCraftingRecipeDeserializer;
 import com.cocona.skyblockrei.hooks.StringNbtReaderHooks;
-import com.cocona.skyblockrei.recipe.skyblockCrafting.SkyblockCraftingRecipe;
+import com.cocona.skyblockrei.data.definition.SkyblockCraftingRecipe;
 import com.cocona.skyblockrei.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import me.shedaniel.rei.api.EntryStack;
 import com.cocona.skyblockrei.data.definition.SkyblockItemDefinition;
@@ -27,29 +27,26 @@ import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.List;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 public class DataManager {
     private static final Path BASE_DIR = FabricLoader.getInstance().getConfigDir().resolve("skyblockrei");
     public static final List<EntryStack> ITEMS = new ArrayList<>();
     public static final List<Pair <String, SkyblockCraftingRecipe>> RECIPES = new ArrayList<>();
-    public static final List<Pair<SkyblockItemDefinition, EntryStack>> DEFINITION_PAIR = new ArrayList<>();
-    
+    public static final List<Pair<String, EntryStack>> DEFINITION_LIST = new ArrayList<>();
+
+
     public static void init() throws IOException {
         Files.createDirectories(BASE_DIR);
         RECIPES.clear();
         ITEMS.clear();
-        DEFINITION_PAIR.clear();
+        DEFINITION_LIST.clear();
         readNEU(BASE_DIR.resolve("NEU.zip"));
     }
     
     private static void readNEU(Path path) throws IOException {
         GsonBuilder builder = new GsonBuilder();
-        SkyblockCraftingRecipeDeserializer deserializer = new SkyblockCraftingRecipeDeserializer();
-        builder.registerTypeAdapter(SkyblockCraftingRecipe.class, deserializer);
         Gson gson = builder.disableHtmlEscaping().setPrettyPrinting().create();
         try (FileSystem system = Utils.openZip(path, false)) {
             StreamSupport.stream(system.getRootDirectories().spliterator(), false)
@@ -59,7 +56,6 @@ public class DataManager {
                             if (p.toString().contains("/items/") && p.toString().endsWith(".json")) {
                                 try (BufferedReader reader = Files.newBufferedReader(p)) {
                                     SkyblockItemDefinition item = gson.fromJson(reader, SkyblockItemDefinition.class);
-                                    item.recipe = gson.fromJson(reader, SkyblockCraftingRecipe.class);
                                     Identifier id;
                                     
                                     String fix = ItemInstanceTheFlatteningFix.getItem(item.id, item.damage);
@@ -72,7 +68,6 @@ public class DataManager {
                                     synchronized (RECIPES){
                                         if(item.recipe != null) {
                                             RECIPES.add(new Pair<>(item.internalName, item.recipe));
-                                        }
                                     }
                                     
                                     ItemStack stack = new ItemStack(Registry.ITEM.get(id));
@@ -100,13 +95,17 @@ public class DataManager {
                                     synchronized (ITEMS) {
                                         ITEMS.add(entry);
                                     }
-                                    synchronized (DEFINITION_PAIR) {
-                                        DEFINITION_PAIR.add(new Pair<>(item, entry));
+                                    synchronized (DEFINITION_LIST) {
+                                        Pair<String, EntryStack> pair = new Pair<>(item.internalName, entry);
+                                        DEFINITION_LIST.add(pair);
                                     }
                                 }
                             }
-                        });
+                        }
+                    });
                     });
         }
     }
+
 }
+
