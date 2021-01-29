@@ -77,7 +77,9 @@ public class PackagedData {
             inputList.add(c2);
             inputList.add(c3);
             Pair<EntryStack, List<EntryStack>> pairRecipe = new Pair<>(out, inputList);
-            output.add(pairRecipe);
+            if(!pairRecipe.getLeft().isEmpty()) {
+                output.add(pairRecipe);
+            }
         }
         return output;
     }
