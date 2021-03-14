@@ -17,6 +17,8 @@ import java.util.stream.StreamSupport;
 public class SkyblockREI implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("skyblock-rei");
 
+    public static PackagedData packagedDataRef;
+
 
     public static final Identifier SKYBLOCK_CRAFTING_ID = new Identifier("skyblock-rei", "recipes/skyblock_crafting");
 
@@ -25,6 +27,10 @@ public class SkyblockREI implements ClientModInitializer {
         GetNEUZip.getZip();
         Utils.run(DataManager::init);
 
+    }
+
+    public static void updatePackagedDataRef(PackagedData update){
+        packagedDataRef = update;
     }
 
     public static boolean isAllEntryStacksNull(List<EntryStack> list) {

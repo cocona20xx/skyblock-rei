@@ -1,6 +1,7 @@
 package com.cocona.skyblockrei;
 
 import com.cocona.skyblockrei.data.PackagedData;
+import com.cocona.skyblockrei.data.search.SkyblockFocusedStackProvider;
 import com.cocona.skyblockrei.recipe.skyblockCrafting.SkyblockCustomCategory;
 import com.cocona.skyblockrei.recipe.skyblockCrafting.SkyblockCustomDisplay;
 import com.google.common.base.Predicates;
@@ -38,6 +39,7 @@ public class SkyblockREIPlugin implements REIPluginV0 {
         stacks.sort(Comparator.<EntryStack, Identifier>comparing(stack -> Registry.ITEM.getId(stack.getItemStack().getItem()))
                 .thenComparing(stack -> stack.asFormatStrippedText().asString()));
         entryRegistry.registerEntries(stacks.toArray(new EntryStack[0]));
+        SkyblockREI.updatePackagedDataRef(packagedData);
     }
 
     @Override
@@ -68,5 +70,10 @@ public class SkyblockREIPlugin implements REIPluginV0 {
     public void registerPluginCategories(RecipeHelper recipeHelper) {
         SkyblockCustomCategory category = new SkyblockCustomCategory();
         recipeHelper.registerCategory(category);
+    }
+
+    @Override
+    public void registerOthers(RecipeHelper recipeHelper) {
+        recipeHelper.registerFocusedStackProvider(new SkyblockFocusedStackProvider());
     }
 }

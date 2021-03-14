@@ -10,7 +10,7 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 
 repositories {
-    jcenter()
+    maven { url "https://maven.shedaniel.me/"}
     maven { url "https://www.cursemaven.com" }
 }
 

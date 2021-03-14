@@ -21,7 +21,7 @@ public class PackagedData {
         defMap = d;
     }
 
-    private EntryStack getEntryFromMap(String key){
+    public EntryStack getEntryFromMap(String key){
         Pair<String, EntryStack> defaultResult = new Pair<>("", EntryStack.empty());
         int amount = 1;
         //amount parsing
